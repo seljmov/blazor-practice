@@ -1,0 +1,187 @@
+﻿@page "/company/details/{Id:int}"
+
+<div style="width: 640px;display: block;margin-left: auto;margin-right: auto;">
+    <h4 class="mt-2 mb-2">Информация о предприятии «@Company.Name‎»</h4>
+    <hr class="mb-4" />
+
+    <div class="mb-2">
+        Идентификатор предприятия: <b>@Company.Id</b>
+    </div>
+    <div class="mb-2">
+        Форма собственности: <b>@Company.OwnershipForm.Name</b>
+    </div>
+    <div class="mb-2">
+        Целевое направление: <b>@Company.TargetPurpose.Name</b>
+    </div>
+    <div class="mb-2">
+        Отрасль экономики: <b>@Company.EconomicSector.Name</b>
+    </div>
+    <div class="mb-2">
+        Количество сотрудников: <b>@Company.EmployeesCount</b>
+    </div>
+    <div class="mb-2">
+        @if (Owners == null || !Owners.Any())
+        {
+            <div>
+                Владелец: <b>Не указано</b>
+            </div>
+        }
+        else
+        {
+            @if (Owners.Count() == 1)
+            {
+                <div>
+                    Владелец: <b>@Owners.First().Name</b>
+                </div>
+            }
+            else
+            {
+                <div>
+                    Владелецы:
+                </div>
+                <ul>
+                    @foreach (var owner in Owners)
+                    {
+                        <li>
+                            <a href="/owner/details/@owner.Id">
+                                <b>@owner.Name</b>
+                            </a>
+                        </li>
+                    }
+                </ul>
+            }
+        }
+    </div>
+    <div class="mb-2">
+        @if (Products == null || !Products.Any())
+        {
+            <div>
+                Продукт: <b>Не указано</b>
+            </div>
+        }
+        else
+        {
+            @if (Products.Count() == 1)
+            {
+                <div>
+                    Продукт: <b>@Products.First().Name</b>
+                </div>
+            }
+            else
+            {
+                <div>
+                    Продукты:
+                </div>
+                <ul>
+                    @foreach (var product in Products)
+                    {
+                        <li>
+                            <a href="/product/details/@product.Id">
+                                <b>@product.Name</b>
+                            </a>
+                        </li>
+                    }
+                </ul>
+            }
+        }
+    </div>
+    <div class="mb-2">
+        @if (Locations == null || !Locations.Any())
+        {
+            <div>
+                Местоположение: <b>Не указано</b>
+            </div>
+        }
+        else
+        {
+            @if (Locations.Count() == 1)
+            {
+                <div>
+                    Местоположение: <b>@Locations.First().Name</b>
+                </div>
+            }
+            else
+            {
+                <div>
+                    Местоположения:
+                </div>
+                <ul>
+                    @foreach (var location in Locations)
+                    {
+                        <li>
+                            <a href="/location/details/@location.Id">
+                                <b>@location.Name</b>
+                            </a>
+                        </li>
+                    }
+                </ul>
+            }
+        }
+    </div>
+    <div class="mb-2">
+        @if (Partners == null || !Partners.Any())
+        {
+            <div>
+                Партнер: <b>Не указано</b>
+            </div>
+        }
+        else
+        {
+            @if (Partners.Count() == 1)
+            {
+                <div>
+                    Партнер: <b>@Partners.First().Name</b>
+                </div>
+            }
+            else
+            {
+                <div>
+                    Партнеры:
+                </div>
+                <ul>
+                    @foreach (var partner in Partners)
+                    {
+                        <li>
+                            <a href="/partner/details/@partner.Id">
+                                <b>@partner.Name</b>
+                            </a>
+                        </li>
+                    }
+                </ul>
+            }
+        }
+    </div>
+    <div class="mb-2">
+        @if (Rivals == null || !Rivals.Any())
+        {
+            <div>
+                Конкурент: <b>Не указано</b>
+            </div>
+        }
+        else
+        {
+            @if (Rivals.Count() == 1)
+            {
+                <div>
+                    Конкурент: <b>@Rivals.First().Name</b>
+                </div>
+            }
+            else
+            {
+                <div>
+                    Конкуренты:
+                </div>
+                <ul>
+                    @foreach (var rival in Rivals)
+                    {
+                        <li>
+                            <a href="/rival/details/@rival.Id">
+                                <b>@rival.Name</b>
+                            </a>
+                        </li>
+                    }
+                </ul>
+            }
+        }
+    </div>
+</div>

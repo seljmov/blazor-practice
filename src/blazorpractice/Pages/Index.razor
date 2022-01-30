@@ -1,9 +1,59 @@
 ﻿@page "/"
 
-<PageTitle>Index</PageTitle>
+<PageTitle>Промышленные предприятия</PageTitle>
 
-<h1>Hello, world!</h1>
+<h2>Список промышленных предприятий</h2>
 
-Welcome to your new app.
+<a class="btn btn-success mt-2 mb-4" href="/company/add" title="Нажмите, чтобы добавить информацию о новом предприятии.">
+	<i class="fas fa-plus"></i> Добавить предприятие
+</a>
 
-<SurveyPrompt Title="How is Blazor working for you?" />
+<ModalView @ref="modalView"></ModalView>
+
+@if (_companies == null || !_companies.Any())
+{
+	<p><em>Список предприятий пуст...</em></p>
+}
+else
+{
+	<table class="table">
+		<thead>
+			<tr>
+				<th>Название</th>
+				<th>Форма собственности</th>
+				<th>Целевое направление</th>
+				<th>Отрасль экономики</th>
+				<th>Количество сотрудников</th>
+				<th>Действия</th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var company in _companies)
+			{
+				<tr>
+					<td>@company.Name</td>
+					<td>@company.OwnershipForm.Name</td>
+					<td>@company.TargetPurpose.Name</td>
+					<td>@company.EconomicSector.Name</td>
+					<td>@company.EmployeesCount</td>
+					<td>
+						<div class="action-area">
+							<a href="/company/details/@company.Id" class="btn btn-primary action-icon" title="Нажмите, чтобы посмотреть подробную информацию.">
+								<i class="fas fa-info"></i>
+							</a>
+							<a href="/company/edit/@company.Id" class="btn btn-secondary action-icon" title="Нажмите, чтобы редактировать информацию.">
+								<i class="fas fa-pen"></i>
+							</a>
+							<a class="btn btn-danger action-icon" title="Нажмите, чтобы удалить инфомацию." @onclick='() => modalView.Open(
+																													title: "Подтверждение удаления",
+																													body: "Данное действие невозможно будет отменить! Вы точно хотите удалить сведения о предприятии?",
+																													submitFunc: () => RemoveCompany(company))'>
+								<i class="fas fa-trash"></i>
+							</a>
+						</div>
+					</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+}
