@@ -1,0 +1,66 @@
+﻿<div class="modal @ModalClass" tabindex="-1" role="dialog" style="display:@ModalDisplay">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">@Title</h5>
+                <button type="button" class="btn-close btn-close-white" @onclick="() => Close()"></button>
+            </div>
+            <div class="modal-body">
+                <p>@Body</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" @onclick="() => Close()">Отменить</button>
+                <button type="button" class="btn btn-danger" @onclick="() => Submit()">Удалить</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Отображение затемнения под модалкой, когда она становится активным -->
+@if (ShowBackdrop)
+{
+    <div class="modal-backdrop fade show"></div>
+}
+
+@code {
+    private string ModalDisplay = "none;";
+    private string ModalClass = "";
+
+    public delegate void SubmitFuncDelegate();
+
+    public bool ShowBackdrop { get; set; }
+
+    [Parameter]
+    public string Title { get; set; }
+
+    [Parameter]
+    public string Body { get; set; }
+
+    [Parameter]
+    public SubmitFuncDelegate SubmitFunc { get; set; }
+
+    private void Submit()
+    {
+        SubmitFunc();
+        Close();
+    }
+
+    public void Open(string title, string body, SubmitFuncDelegate submitFunc)
+    {
+        Title = title;
+        Body = body;
+        SubmitFunc = submitFunc;
+        ModalDisplay = "block;";
+        ModalClass = "Show";
+        ShowBackdrop = true;
+        StateHasChanged();
+    }
+
+    public void Close()
+    {
+        ModalDisplay = "none;";
+        ModalClass = "";
+        ShowBackdrop = false;
+        StateHasChanged();
+    }
+}

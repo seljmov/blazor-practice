@@ -31,6 +31,25 @@ public class Company : IHandbook
     /// </summary>
     public int EmployeesCount { get; set; }
 
+    #region For Display
+
+    /// <summary>
+    /// Форма собственности
+    /// </summary>
+    public OwnershipForm OwnershipForm { get; set; }
+
+    /// <summary>
+    /// Целевое направление
+    /// </summary>
+    public TargetPurpose TargetPurpose { get; set; }
+
+    /// <summary>
+    /// Отрасль экономики
+    /// </summary>
+    public EconomicSector EconomicSector { get; set; }
+
+    #endregion
+
     /// <inheritdoc cref="IHandbook.Create"/>
     public void Create()
     {

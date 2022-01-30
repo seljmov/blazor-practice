@@ -8,7 +8,7 @@ namespace blazorpractice.Contexts;
 /// </summary>
 public class DatabaseContext : DbContext
 {
-    private readonly string _databasePath = @"Server=(localdb)\\mssqllocaldb;Database=blazorpracticedb;Trusted_Connection=True;MultipleActiveResultSets=true";
+    private readonly string _databasePath = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=blazorpracticedb;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
