@@ -1,0 +1,73 @@
+﻿@page "/owners/details/{Id:int}"
+
+@if (Owner == null)
+{
+	<b>Владельца не существует!</b>
+}
+else
+{
+	<div style="width: 640px;display: block;margin-left: auto;margin-right: auto; margin-bottom: 4rem;">
+		<h4 class="mb-4">Информацию о владельце @Owner.Name</h4>
+
+		<div class="mb-2">
+			ФИО: <b>@Owner.Name</b>
+		</div>
+
+		<div class="mb-2">
+			Место рождения: <b>@Owner.PlaceBirth</b>
+		</div>
+
+		<div class="mb-2">
+			Дата рождения: <b>@Owner.DateBirth</b>
+		</div>
+
+		<div class="mb-2">
+			Гражданство: <b>@Owner.CitizenShip</b>
+		</div>
+
+		<div class="mb-2">
+			Образование: <b>@Owner.Education</b>
+		</div>
+
+		@if (Owner.Comment != null)
+		{
+			<div class="mb-2">
+				Комментарий: <b>@Owner.Comment</b>
+			</div>
+		}
+
+		<div class="mb-2">
+            @if (Companies == null || !Companies.Any())
+            {
+                <div>
+                    Предприятие, которым владеет: <b>Не указано</b>
+                </div>
+            }
+            else
+            {
+                @if (Companies.Count() == 1)
+                {
+                    <div>
+                        Предприятие, которым владеет: <b>@Companies.First().Name</b>
+                    </div>
+                }
+                else
+                {
+                    <div>
+                        Предприятия, которыми владеет:
+                    </div>
+                    <ul>
+                        @foreach (var company in Companies)
+                        {
+                            <li>
+                                <a href="/company/details/@company.Id">
+                                    <b>@company.Name</b>
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                }
+            }
+        </div>
+	</div>
+}
