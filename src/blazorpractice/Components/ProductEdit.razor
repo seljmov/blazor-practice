@@ -1,0 +1,44 @@
+﻿@page "/products/edit/{Id:int}"
+
+@if (Product == null)
+{
+	<b>Продукта не существует!</b>
+}
+else
+{
+	<div style="width: 640px;display: block;margin-left: auto;margin-right: auto; margin-bottom: 4rem;">
+		<h4 class="mb-4">Изменить информацию о продукте</h4>
+
+		<div class="form-group mb-4">
+		    <label>Название</label>
+		    <input class="form-control" @bind="@Product.Name">
+	    </div>
+
+	    <div class="form-group mb-4">
+		    <label>Описание (необязательно)</label>
+		    <input class="form-control" @bind="@Product.Description">
+	    </div>
+
+        <div class="form-group mb-4">
+            <label>Материалы (необязательно)</label>
+            <BlazoredTypeahead 
+                                SearchMethod="@SearchProduct" 
+                                EnableDropDown="true"
+                                ShowDropDownOnFocus="true"
+                                @bind-Values="@SelectedProducts" 
+                                Placeholder="Укажите один и более материалов...">
+                <SelectedTemplate>
+                    @context.Name
+                </SelectedTemplate>
+                <ResultTemplate>
+                    @context.Name
+                </ResultTemplate>
+                <NotFoundTemplate>
+                    Ничего не найдено.
+                </NotFoundTemplate>
+            </BlazoredTypeahead>
+        </div>
+	</div>
+}
+
+
