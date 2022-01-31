@@ -38,7 +38,11 @@ public partial class CompanyDetails
             .Select(relation => relation.Id).ToList();
         Owners = _context.Owners.Where(owner => companyOwners.Contains(owner.Id)).ToList();
 
-        Locations = _context.Locations.Where(location => location.CompanyId == Company.Id).ToList();
+        var companyLocations = _context.CompanyLocationRelations
+            .Where(relation => relation.CompanyId == Company.Id)
+            .Select(relation => relation.Id).ToList();
+        Locations = _context.Locations.Where(location => companyLocations.Contains(location.Id)).ToList();
+
         Partners = _context.Partners.Where(partner => partner.CompanyId == Company.Id).ToList();
         Rivals = _context.Rivals.Where(rival => rival.CompanyId == Company.Id).ToList();
     }
