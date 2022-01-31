@@ -1,0 +1,57 @@
+﻿@page "/owners/add"
+
+<div style="width: 640px;display: block;margin-left: auto;margin-right: auto; margin-bottom: 4rem;">
+	<h4 class="mb-4">Добавить нового владельца</h4>
+
+	<div class="form-group mb-4">
+		<label>ФИО</label>
+		<input class="form-control" @bind="@Name">
+	</div>
+
+	<div class="form-group mb-4">
+		<label>Место рождения</label>
+		<input class="form-control" @bind="@PlaceBirth">
+	</div>
+
+    <div class="form-group mb-4">
+		<label>Дата рождения</label>
+		<input class="form-control" @bind="@DateBirth">
+	</div>
+
+    <div class="form-group mb-4">
+		<label>Гражданство</label>
+		<input class="form-control" @bind="@CitizenShip">
+	</div>
+
+    <div class="form-group mb-4">
+		<label>Образование</label>
+		<input class="form-control" @bind="@Education">
+	</div>
+
+    <div class="form-group mb-4">
+		<label>Комментарий</label>
+		<input class="form-control" @bind="@Comment">
+	</div>
+
+    <div class="form-group mb-4">
+        <label>Предприятия, которыми владеет (необязательно)</label>
+        <BlazoredTypeahead 
+                            SearchMethod="@SearchCompany" 
+                            EnableDropDown="true"
+                            ShowDropDownOnFocus="true"
+                            @bind-Values="@SelectedCompanies" 
+                            Placeholder="Укажите одно или более предприятий...">
+            <SelectedTemplate>
+                @context.Name
+            </SelectedTemplate>
+            <ResultTemplate>
+                @context.Name
+            </ResultTemplate>
+            <NotFoundTemplate>
+                Ничего не найдено.
+            </NotFoundTemplate>
+        </BlazoredTypeahead>
+    </div>
+</div>
+
+

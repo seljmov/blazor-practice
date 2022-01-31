@@ -1,0 +1,62 @@
+﻿@page "/owners/edit/{Id:int}"
+
+@if (Owner == null)
+{
+	<b>Владельца не существует!</b>
+}
+else
+{
+	<div style="width: 640px;display: block;margin-left: auto;margin-right: auto; margin-bottom: 4rem;">
+		<h4 class="mb-4">Изменить информацию о владельце</h4>
+
+		<div class="form-group mb-4">
+			<label>ФИО</label>
+			<input class="form-control" @bind="@Owner.Name">
+		</div>
+
+		<div class="form-group mb-4">
+			<label>Место рождения</label>
+			<input class="form-control" @bind="@Owner.PlaceBirth">
+		</div>
+
+		<div class="form-group mb-4">
+			<label>Дата рождения</label>
+			<input class="form-control" @bind="@Owner.DateBirth">
+		</div>
+
+		<div class="form-group mb-4">
+			<label>Гражданство</label>
+			<input class="form-control" @bind="@Owner.CitizenShip">
+		</div>
+
+		<div class="form-group mb-4">
+			<label>Образование</label>
+			<input class="form-control" @bind="@Owner.Education">
+		</div>
+
+		<div class="form-group mb-4">
+			<label>Комментарий</label>
+			<input class="form-control" @bind="@Owner.Comment">
+		</div>
+
+		<div class="form-group mb-4">
+			<label>Предприятия, которыми владеет (необязательно)</label>
+			<BlazoredTypeahead 
+								SearchMethod="@SearchCompany" 
+								EnableDropDown="true"
+								ShowDropDownOnFocus="true"
+								@bind-Values="@SelectedCompanies" 
+								Placeholder="Укажите одно или более предприятий...">
+				<SelectedTemplate>
+					@context.Name
+				</SelectedTemplate>
+				<ResultTemplate>
+					@context.Name
+				</ResultTemplate>
+				<NotFoundTemplate>
+					Ничего не найдено.
+				</NotFoundTemplate>
+			</BlazoredTypeahead>
+		</div>
+	</div>
+}
