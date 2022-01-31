@@ -1,0 +1,28 @@
+﻿@page "/locations/details/{Id:int}"
+
+@if (Location == null)
+{
+	<b>Местоположение не существует!</b>
+}
+else
+{
+	<div style="width: 640px;display: block;margin-left: auto;margin-right: auto;">
+        <h4 class="mt-2 mb-2">Информация о местоположении</h4>
+        <hr class="mb-4" />
+
+        <div class="mb-2">
+            Наименование: <b>@Location.Name</b>
+        </div>
+        <div class="mb-2">
+            Адрес: <b>@Location.Address</b>
+        </div>
+        @if (Location.Comment != null)
+        {
+            <div class="mb-2">
+                Комментарий: <b>@Location.Comment</b>
+            </div>
+        }
+    </div>
+}
+
+

@@ -1,9 +1,9 @@
 ﻿namespace blazorpractice.Models;
 
 /// <summary>
-/// Местоположение
+/// Связь предприятие/местоположение
 /// </summary>
-public class Location : IHandbook
+public class CompanyLocationRelations : IHandbook
 {
     /// <inheritdoc cref="IHandbook.Id"/> 
     public int Id { get; set; }
@@ -12,14 +12,14 @@ public class Location : IHandbook
     public string Name { get; set; }
 
     /// <summary>
-    /// Адрес
+    /// Идентификатор предприятия
     /// </summary>
-    public string Address { get; set; }
+    public int CompanyId { get; set; }
 
     /// <summary>
-    /// Комментарий
+    /// Идентификатор местоположения
     /// </summary>
-    public string Comment { get; set; }
+    public int LocationId { get; set; }
 
     /// <inheritdoc cref="IHandbook.Create"/> 
     public void Create()

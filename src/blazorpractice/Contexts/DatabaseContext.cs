@@ -21,6 +21,11 @@ public class DatabaseContext : DbContext
     public DbSet<Company> Companies { get; set; }
 
     /// <summary>
+    /// Словарь связей предприятие/местоположение
+    /// </summary>
+    public DbSet<CompanyLocationRelations> CompanyLocationRelations { get; set; }
+
+    /// <summary>
     /// Словарь связей предприятие/владелец
     /// </summary>
     public DbSet<CompanyOwnerRelations> CompanyOwnerRelations { get; set; }
