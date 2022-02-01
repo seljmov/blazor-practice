@@ -68,7 +68,7 @@ else
 		</div>
 
 		<div>
-        <button type="submit" class="btn btn-success" @onclick=@EditOwner disabled="@EndEdit">Сохранить</button>
-    </div>
+			<button type="submit" class="btn btn-success" @onclick=@EditOwner disabled="@(EndEdit && SuccessEdit)">Сохранить</button>
+		</div>
 	</div>
 }
