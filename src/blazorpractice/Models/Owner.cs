@@ -1,4 +1,5 @@
 ﻿using blazorpractice.Contexts;
+using Microsoft.EntityFrameworkCore;
 
 namespace blazorpractice.Models;
 
@@ -58,10 +59,7 @@ public class Owner : IHandbook
     public void Remove()
     {
         var context = new DatabaseContext();
-        var ownerCompaniesRelations = context.CompanyOwnerRelations.Where(relation => relation.OwnerId == Id);
-        foreach (var relation in ownerCompaniesRelations)
-            context.CompanyOwnerRelations.Remove(relation);
-        context.Owners.Remove(this);
+        context.Database.ExecuteSqlInterpolated($"execute DeleteOwner @id = {Id}");
         context.SaveChanges();
     }
 }
