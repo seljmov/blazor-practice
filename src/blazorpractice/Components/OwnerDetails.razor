@@ -7,26 +7,26 @@
 else
 {
 	<div style="width: 640px;display: block;margin-left: auto;margin-right: auto; margin-bottom: 4rem;">
-		<h4 class="mb-4">Информацию о владельце @Owner.Name</h4>
+		<h4 class="mb-4">Информацию о владельце</h4>
 
 		<div class="mb-2">
 			ФИО: <b>@Owner.Name</b>
 		</div>
 
 		<div class="mb-2">
-			Место рождения: <b>@Owner.PlaceBirth</b>
+			Место рождения: <b>@(Owner.PlaceBirth ?? "Не указано")</b>
 		</div>
 
 		<div class="mb-2">
-			Дата рождения: <b>@Owner.DateBirth</b>
+			Дата рождения: <b>@(Owner.DateBirth ?? "Не указано")</b>
 		</div>
 
 		<div class="mb-2">
-			Гражданство: <b>@Owner.CitizenShip</b>
+			Гражданство: <b>@(Owner.CitizenShip ?? "Не указано")</b>
 		</div>
 
 		<div class="mb-2">
-			Образование: <b>@Owner.Education</b>
+			Образование: <b>@(Owner.Education ?? "Не указано")</b>
 		</div>
 
 		@if (Owner.Comment != null)

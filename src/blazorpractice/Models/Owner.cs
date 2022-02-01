@@ -1,4 +1,6 @@
-﻿namespace blazorpractice.Models;
+﻿using blazorpractice.Contexts;
+
+namespace blazorpractice.Models;
 
 /// <summary>
 /// Владелец предприятия
@@ -39,18 +41,27 @@ public class Owner : IHandbook
     /// <inheritdoc cref="IHandbook.Create"/> 
     public void Create()
     {
-        throw new NotImplementedException();
+        var context = new DatabaseContext();
+        context.Owners.Add(this);
+        context.SaveChanges();
     }
 
     /// <inheritdoc cref="IHandbook.Edit"/> 
     public void Edit()
     {
-        throw new NotImplementedException();
+        var context = new DatabaseContext();
+        context.Owners.Update(this);
+        context.SaveChanges();
     }
 
     /// <inheritdoc cref="IHandbook.Remove"/> 
     public void Remove()
     {
-        throw new NotImplementedException();
+        var context = new DatabaseContext();
+        var ownerCompaniesRelations = context.CompanyOwnerRelations.Where(relation => relation.OwnerId == Id);
+        foreach (var relation in ownerCompaniesRelations)
+            context.CompanyOwnerRelations.Remove(relation);
+        context.Owners.Remove(this);
+        context.SaveChanges();
     }
 }

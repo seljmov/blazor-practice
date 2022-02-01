@@ -9,6 +9,14 @@ else
 	<div style="width: 640px;display: block;margin-left: auto;margin-right: auto; margin-bottom: 4rem;">
 		<h4 class="mb-4">Изменить информацию о владельце</h4>
 
+		@if (EndEdit)
+		{
+			<div class="alert @(SuccessEdit ? "alert-success" : "alert-danger") mb-4" role="alert">
+			  <b>@(SuccessEdit ? "Отлично!" : "Ошибка!")</b> <br>
+			  @(SuccessEdit ? "Вы успешно изменили информацию о владельце!" : "При изменении информации о владельце что-то пошло не так...")
+			</div>
+		}
+
 		<div class="form-group mb-4">
 			<label>ФИО</label>
 			<input class="form-control" @bind="@Owner.Name">
@@ -58,5 +66,9 @@ else
 				</NotFoundTemplate>
 			</BlazoredTypeahead>
 		</div>
+
+		<div>
+        <button type="submit" class="btn btn-success" @onclick=@EditOwner disabled="@EndEdit">Сохранить</button>
+    </div>
 	</div>
 }

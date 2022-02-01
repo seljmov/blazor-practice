@@ -20,8 +20,7 @@ public partial class Owners
 
     private void RemoveOwner(Owner owner)
     {
-        _context.Owners.Remove(owner);
-        _context.SaveChanges();
+        owner.Remove();
         owners = owners.Where(x => x.Id != owner.Id);
         StateHasChanged();
     }
