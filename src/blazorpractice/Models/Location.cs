@@ -1,4 +1,7 @@
-﻿namespace blazorpractice.Models;
+﻿using blazorpractice.Contexts;
+using Microsoft.EntityFrameworkCore;
+
+namespace blazorpractice.Models;
 
 /// <summary>
 /// Местоположение
@@ -24,18 +27,24 @@ public class Location : IHandbook
     /// <inheritdoc cref="IHandbook.Create"/> 
     public void Create()
     {
-        throw new NotImplementedException();
+        var context = new DatabaseContext();
+        context.Locations.Add(this);
+        context.SaveChanges();
     }
 
     /// <inheritdoc cref="IHandbook.Edit"/> 
     public void Edit()
     {
-        throw new NotImplementedException();
+        var context = new DatabaseContext();
+        context.Locations.Update(this);
+        context.SaveChanges();
     }
 
     /// <inheritdoc cref="IHandbook.Remove"/> 
     public void Remove()
     {
-        throw new NotImplementedException();
+        var context = new DatabaseContext();
+        context.Database.ExecuteSqlInterpolated($"execute DeleteLocation @id = {Id}");
+        context.SaveChanges();
     }
 }

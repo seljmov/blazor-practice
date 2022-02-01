@@ -20,8 +20,7 @@ public partial class Locations
 
     private void RemoveLocation(Location location)
     {
-        _context.Locations.Remove(location);
-        _context.SaveChanges();
+        location.Remove();
         locations = locations.Where(x => x.Id != location.Id);
         StateHasChanged();
     }
