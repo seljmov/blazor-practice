@@ -13,8 +13,12 @@ public partial class OwnerEdit
 
     private Owner Owner;
 
+    private IList<Company> BeforeEditSelectedCompanies { get; set; }
     private IList<Company> SelectedCompanies { get; set; }
     private IEnumerable<Company> Companies { get; set; }
+
+    private bool EndEdit { get; set; } = false;
+    private bool SuccessEdit { get; set; } = false;
 
     protected override void OnInitialized()
     {
@@ -24,8 +28,39 @@ public partial class OwnerEdit
             .Where(relation => relation.OwnerId == Id)
             .Select(relation => relation.CompanyId).ToList();
         SelectedCompanies = _context.Companies.Where(company => ownersCompanies.Contains(company.Id)).ToList();
+        BeforeEditSelectedCompanies = _context.Companies.Where(company => ownersCompanies.Contains(company.Id)).ToList();
 
         Companies = _context.Companies.ToList();
+    }
+
+    private void EditOwner()
+    {
+        EndEdit = true;
+        try
+        {
+            Owner.Edit();
+            var addedCompanies = SelectedCompanies.Where(company => !BeforeEditSelectedCompanies.Contains(company)).ToList();
+            var removedCompanies = BeforeEditSelectedCompanies.Where(company => !SelectedCompanies.Contains(company)).ToList();
+
+            foreach (var company in addedCompanies)
+                _context.CompanyOwnerRelations.Add(new CompanyOwnerRelations { CompanyId = company.Id, OwnerId = Owner.Id });
+
+            foreach (var company in removedCompanies)
+            {
+                var relation = _context.CompanyOwnerRelations.Where(x => x.CompanyId == company.Id && Owner.Id == Owner.Id).First();
+                _context.CompanyOwnerRelations.Remove(relation);
+            }
+
+            _context.SaveChanges();
+            SuccessEdit = true;
+            return;
+        }
+        catch (Exception e)
+        {
+
+        }
+
+        SuccessEdit = false;
     }
 
     private async Task<IEnumerable<Company>> SearchCompany(string pattern)
