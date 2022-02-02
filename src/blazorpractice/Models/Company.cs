@@ -1,4 +1,7 @@
-﻿namespace blazorpractice.Models;
+﻿using blazorpractice.Contexts;
+using Microsoft.EntityFrameworkCore;
+
+namespace blazorpractice.Models;
 
 /// <summary>
 /// Промышленное предприятие
@@ -53,18 +56,24 @@ public class Company : IHandbook
     /// <inheritdoc cref="IHandbook.Create"/>
     public void Create()
     {
-        throw new NotImplementedException();
+        var context = new DatabaseContext();
+        context.Companies.Add(this);
+        context.SaveChanges();
     }
 
     /// <inheritdoc cref="IHandbook.Edit"/>
     public void Edit()
     {
-        throw new NotImplementedException();
+        var context = new DatabaseContext();
+        context.Companies.Update(this);
+        context.SaveChanges();
     }
 
     /// <inheritdoc cref="IHandbook.Remove"/>
     public void Remove()
     {
-        throw new NotImplementedException();
+        var context = new DatabaseContext();
+        context.Database.ExecuteSqlInterpolated($"execute DeleteCompany @id = {Id}");
+        context.SaveChanges();
     }
 }

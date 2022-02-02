@@ -36,6 +36,16 @@ public class DatabaseContext : DbContext
     public DbSet<CompanyProductRelations> CompanyProductRelations { get; set; }
 
     /// <summary>
+    /// Словарь связей предприятие/партнер
+    /// </summary>
+    public DbSet<CompanyPartnerRelation> CompanyPartnerRelations { get; set; }
+
+    /// <summary>
+    /// Словарь связей предприятие/конкурент
+    /// </summary>
+    public DbSet<CompanyRivalRelation> CompanyRivalRelations { get; set; }
+
+    /// <summary>
     /// СЛоварь отраслей экономики
     /// </summary>
     public DbSet<EconomicSector> EconomicSectors { get; set; }
@@ -61,11 +71,6 @@ public class DatabaseContext : DbContext
     public DbSet<OwnershipForm> OwnershipForms { get; set; }
 
     /// <summary>
-    /// Словарь предприятий-партнеров
-    /// </summary>
-    public DbSet<Partner> Partners { get; set; }
-
-    /// <summary>
     /// Словарь продуктов предприятий
     /// </summary>
     public DbSet<Product> Products { get; set; }
@@ -74,11 +79,6 @@ public class DatabaseContext : DbContext
     /// Словарь связей продукт/ингредиент
     /// </summary>
     public DbSet<ProductIngredientRelations> ProductIngredientRelations { get; set; }
-
-    /// <summary>
-    /// Словарь предприятий-конкурентов
-    /// </summary>
-    public DbSet<Rival> Rivals { get; set; }
 
     /// <summary>
     /// Словарь целевых направлений

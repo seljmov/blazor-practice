@@ -31,7 +31,7 @@
             @if (Owners.Count() == 1)
             {
                 <div>
-                    Владелец: <b>@Owners.First().Name</b>
+                    Владелец: <a href="/owners/details/@Owners.First().Id"><b>@Owners.First().Name</b></a>
                 </div>
             }
             else
@@ -43,7 +43,7 @@
                     @foreach (var owner in Owners)
                     {
                         <li>
-                            <a href="/owner/details/@owner.Id">
+                            <a href="/owners/details/@owner.Id">
                                 <b>@owner.Name</b>
                             </a>
                         </li>
@@ -64,7 +64,7 @@
             @if (Products.Count() == 1)
             {
                 <div>
-                    Продукт: <b>@Products.First().Name</b>
+                    Продукт: <a href="/products/details/@Products.First().Id"><b>@Locations.First().Name</b></a>
                 </div>
             }
             else
@@ -76,7 +76,7 @@
                     @foreach (var product in Products)
                     {
                         <li>
-                            <a href="/product/details/@product.Id">
+                            <a href="/products/details/@product.Id">
                                 <b>@product.Name</b>
                             </a>
                         </li>
@@ -97,7 +97,7 @@
             @if (Locations.Count() == 1)
             {
                 <div>
-                    Местоположение: <b>@Locations.First().Name</b>
+                    Местоположение: <a href="/locations/details/@Locations.First().Id"><b>@Locations.First().Name</b></a>
                 </div>
             }
             else
@@ -109,7 +109,7 @@
                     @foreach (var location in Locations)
                     {
                         <li>
-                            <a href="/location/details/@location.Id">
+                            <a href="/locations/details/@location.Id">
                                 <b>@location.Name</b>
                             </a>
                         </li>
@@ -130,7 +130,7 @@
             @if (Partners.Count() == 1)
             {
                 <div>
-                    Партнер: <b>@Partners.First().Name</b>
+                    Партнер: <a href="/company/details/@Partners.First().Id"><b>@Partners.First().Name</b></a>
                 </div>
             }
             else
@@ -142,7 +142,7 @@
                     @foreach (var partner in Partners)
                     {
                         <li>
-                            <a href="/partner/details/@partner.Id">
+                            <a href="/company/details/@partner.Id">
                                 <b>@partner.Name</b>
                             </a>
                         </li>
@@ -163,7 +163,7 @@
             @if (Rivals.Count() == 1)
             {
                 <div>
-                    Конкурент: <b>@Rivals.First().Name</b>
+                    Конкурент: <a href="/company/details/@Rivals.First().Id"><b>@Rivals.First().Name</b></a>
                 </div>
             }
             else
@@ -175,7 +175,7 @@
                     @foreach (var rival in Rivals)
                     {
                         <li>
-                            <a href="/rival/details/@rival.Id">
+                            <a href="/company/details/@rival.Id">
                                 <b>@rival.Name</b>
                             </a>
                         </li>

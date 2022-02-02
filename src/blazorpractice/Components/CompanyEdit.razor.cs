@@ -13,14 +13,24 @@ public partial class CompanyEdit
     public int Id { get; set; }
 
     private Company Company { get; set; }
+
+    private OwnershipForm BeforeSelectedOwnershipForm { get; set; }
+    private TargetPurpose BeforeSelectedTargetPurpose { get; set; }
+    private EconomicSector BeforeSelectedEconomicSector { get; set; }
+    private IList<Location> BeforeSelectedLocations { get; set; }
+    private IList<Product> BeforeSelectedProducts { get; set; }
+    private IList<Owner> BeforeSelectedOwners { get; set; }
+    private IList<Company> BeforeSelectedPartners { get; set; }
+    private IList<Company> BeforeSelectedRivals { get; set; }
+
     private OwnershipForm SelectedOwnershipForm { get; set; }
     private TargetPurpose SelectedTargetPurpose { get; set; }
     private EconomicSector SelectedEconomicSector { get; set; }
     private IList<Location> SelectedLocations { get; set; }
     private IList<Product> SelectedProducts { get; set; }
     private IList<Owner> SelectedOwners { get; set; }
-    private IList<Partner> SelectedPartners { get; set; }
-    private IList<Rival> SelectedRivals { get; set; }
+    private IList<Company> SelectedPartners { get; set; }
+    private IList<Company> SelectedRivals { get; set; }
 
     private IEnumerable<OwnershipForm> OwnershipForms { get; set; }
     private IEnumerable<TargetPurpose> TargetPurposes { get; set; }
@@ -28,10 +38,13 @@ public partial class CompanyEdit
     private IEnumerable<Location> Locations { get; set; }
     private IEnumerable<Product> Products { get; set; }
     private IEnumerable<Owner> Owners { get; set; }
-    private IEnumerable<Partner> Partners { get; set; }
-    private IEnumerable<Rival> Rivals { get; set; }
+    private IEnumerable<Company> Partners { get; set; }
+    private IEnumerable<Company> Rivals { get; set; }
 
-    protected override void OnInitialized()
+    private bool EndEdit { get; set; } = false;
+    private bool SuccessEdit { get; set; } = false;
+
+    protected override void OnParametersSet()
     {
         Company = _context.Companies
             .Include(c => c.OwnershipForm)
@@ -45,21 +58,47 @@ public partial class CompanyEdit
 
         var companyProducts = _context.CompanyProductRelations
             .Where(relation => relation.CompanyId == Company.Id)
-            .Select(relation => relation.Id).ToList();
+            .Select(relation => relation.ProductId).ToList();
         SelectedProducts = _context.Products.Where(product => companyProducts.Contains(product.Id)).ToList();
 
         var companyOwners = _context.CompanyOwnerRelations
             .Where(relation => relation.CompanyId == Company.Id)
-            .Select(relation => relation.Id).ToList();
+            .Select(relation => relation.OwnerId).ToList();
         SelectedOwners = _context.Owners.Where(owner => companyOwners.Contains(owner.Id)).ToList();
 
         var companyLocations = _context.CompanyLocationRelations
             .Where(relation => relation.CompanyId == Company.Id)
-            .Select(relation => relation.Id).ToList();
+            .Select(relation => relation.LocationId).ToList();
         SelectedLocations = _context.Locations.Where(location => companyLocations.Contains(location.Id)).ToList();
 
-        SelectedPartners = _context.Partners.Where(partner => partner.CompanyId == Company.Id).ToList();
-        SelectedRivals = _context.Rivals.Where(rival => rival.CompanyId == Company.Id).ToList();
+        // Предприятия-партнеры
+        var companyPartners = _context.CompanyPartnerRelations
+           .Where(relation => relation.CompanyId == Company.Id)
+           .Select(relation => relation.CompanyPartnerId).ToList();
+        // Предприятие, где мы партнеры
+        var partnersCompanies = _context.CompanyPartnerRelations
+           .Where(relation => relation.CompanyPartnerId == Company.Id)
+           .Select(relation => relation.CompanyId).ToList();
+        SelectedPartners = _context.Companies.Where(company => companyPartners.Contains(company.Id) || partnersCompanies.Contains(company.Id)).Distinct().ToList();
+
+        // Предприятия-конкуренты
+        var companyRivals = _context.CompanyRivalRelations
+           .Where(relation => relation.CompanyId == Company.Id)
+           .Select(relation => relation.CompanyRivalId).ToList();
+        // Предприятия, где мы конкуренты
+        var rivalsCompany = _context.CompanyRivalRelations
+           .Where(relation => relation.CompanyRivalId == Company.Id)
+           .Select(relation => relation.CompanyId).ToList();
+        SelectedRivals = _context.Companies.Where(company => companyRivals.Contains(company.Id) || rivalsCompany.Contains(company.Id)).Distinct().ToList();
+
+        BeforeSelectedOwnershipForm = Company.OwnershipForm;
+        BeforeSelectedTargetPurpose = Company.TargetPurpose;
+        BeforeSelectedEconomicSector = Company.EconomicSector;
+        BeforeSelectedOwners = _context.Owners.Where(owner => companyOwners.Contains(owner.Id)).ToList();
+        BeforeSelectedProducts = _context.Products.Where(product => companyProducts.Contains(product.Id)).ToList();
+        BeforeSelectedLocations = _context.Locations.Where(location => companyLocations.Contains(location.Id)).ToList();
+        BeforeSelectedPartners = _context.Companies.Where(company => companyPartners.Contains(company.Id) || partnersCompanies.Contains(company.Id)).Distinct().ToList();
+        BeforeSelectedRivals = _context.Companies.Where(company => companyRivals.Contains(company.Id) || rivalsCompany.Contains(company.Id)).Distinct().ToList();
 
         OwnershipForms = _context.OwnershipForms.ToList();
         TargetPurposes = _context.TargetPurposes.ToList();
@@ -67,8 +106,101 @@ public partial class CompanyEdit
         Locations = _context.Locations.ToList();
         Products = _context.Products.ToList();
         Owners = _context.Owners.ToList();
-        Partners = _context.Partners.ToList();
-        Rivals = _context.Rivals.ToList();
+        Partners = _context.Companies.ToList();
+        Rivals = _context.Companies.ToList();
+    }
+
+    private void EditCompany()
+    {
+        EndEdit = true;
+        try
+        {
+            Company.Edit();
+
+            var addedLocations = SelectedLocations.Where(x => !BeforeSelectedLocations.Contains(x)).ToList();
+            var removedLocations = BeforeSelectedLocations.Where(x => !SelectedLocations.Contains(x)).ToList();
+
+            foreach (var item in addedLocations)
+            {
+                var relation = new CompanyLocationRelations { CompanyId = Company.Id, LocationId = item.Id };
+                relation.Create();
+            }
+
+            foreach (var item in removedLocations)
+            {
+                var relation = _context.CompanyLocationRelations.Where(x => x.CompanyId == Company.Id && x.LocationId == item.Id).First();
+                relation.Remove();
+            }
+
+            var addedOwners = SelectedOwners.Where(x => !BeforeSelectedOwners.Contains(x)).ToList();
+            var removedOwners = BeforeSelectedOwners.Where(x => !SelectedOwners.Contains(x)).ToList();
+
+            foreach (var item in addedOwners)
+            {
+                var relation = new CompanyOwnerRelations { CompanyId = Company.Id, OwnerId = item.Id };
+                relation.Create();
+            }
+
+            foreach (var item in removedOwners)
+            {
+                var relation = _context.CompanyOwnerRelations.Where(x => x.CompanyId == Company.Id && x.OwnerId == item.Id).First();
+                relation.Remove();
+            }
+
+            var addedProducts = SelectedProducts.Where(x => !BeforeSelectedProducts.Contains(x)).ToList();
+            var removedProducts = BeforeSelectedProducts.Where(x => !SelectedProducts.Contains(x)).ToList();
+
+            foreach (var item in addedProducts)
+            {
+                var relation = new CompanyProductRelations { CompanyId = Company.Id, ProductId = item.Id };
+                relation.Create();
+            }
+
+            foreach (var item in removedProducts)
+            {
+                var relation = _context.CompanyProductRelations.Where(x => x.CompanyId == Company.Id && x.ProductId == item.Id).First();
+                relation.Remove();
+            }
+
+            var addedPartners = SelectedPartners.Where(x => !BeforeSelectedPartners.Contains(x)).ToList();
+            var removedPartners = BeforeSelectedPartners.Where(x => !SelectedPartners.Contains(x)).ToList();
+
+            foreach (var item in addedPartners)
+            {
+                var relation = new CompanyPartnerRelation { CompanyId = Company.Id, CompanyPartnerId = item.Id };
+                relation.Create();
+            }
+
+            foreach (var item in removedPartners)
+            {
+                var relation = _context.CompanyPartnerRelations.Where(x => x.CompanyId == Company.Id && x.CompanyPartnerId == item.Id).First();
+                relation.Remove();
+            }
+
+            var addedRivals = SelectedRivals.Where(x => !BeforeSelectedRivals.Contains(x)).ToList();
+            var removedRivals = BeforeSelectedRivals.Where(x => !SelectedRivals.Contains(x)).ToList();
+
+            foreach (var item in addedRivals)
+            {
+                var relation = new CompanyRivalRelation { CompanyId = Company.Id, CompanyRivalId = item.Id };
+                relation.Create();
+            }
+
+            foreach (var item in removedRivals)
+            {
+                var relation = _context.CompanyRivalRelations.Where(x => x.CompanyId == Company.Id && x.CompanyRivalId == item.Id).First();
+                relation.Remove();
+            }
+
+            _context.SaveChanges();
+            SuccessEdit = true;
+            return;
+        }
+        catch (Exception)
+        {
+        }
+
+        SuccessEdit = false;
     }
 
     private (bool IsHaveEmptyHandbook, string ErrorMessage) CanAddCompanyVerify()
@@ -109,20 +241,20 @@ public partial class CompanyEdit
         if (EconomicSectors == null || !EconomicSectors.Any())
             names.Add("Отрасль экономики");
 
-        if (Locations == null || !Locations.Any())
-            names.Add("Местоположения");
+        //if (Locations == null || !Locations.Any())
+        //    names.Add("Местоположения");
 
-        if (Products == null || !Products.Any())
-            names.Add("Продукты предприятий");
+        //if (Products == null || !Products.Any())
+        //    names.Add("Продукты предприятий");
 
-        if (Owners == null || !Owners.Any())
-            names.Add("Владельцы");
+        //if (Owners == null || !Owners.Any())
+        //    names.Add("Владельцы");
 
-        if (Partners == null || !Partners.Any())
-            names.Add("Партнеры");
+        //if (Partners == null || !Partners.Any())
+        //    names.Add("Партнеры");
 
-        if (Rivals == null || !Rivals.Any())
-            names.Add("Конкуренты");
+        //if (Rivals == null || !Rivals.Any())
+        //    names.Add("Конкуренты");
 
         return names;
     }
@@ -157,12 +289,12 @@ public partial class CompanyEdit
         return await Task.FromResult(Owners.Where(form => form.Name.ToLower().Contains(pattern.ToLower())));
     }
 
-    private async Task<IEnumerable<Partner>> SearchPartner(string pattern)
+    private async Task<IEnumerable<Company>> SearchPartner(string pattern)
     {
         return await Task.FromResult(Partners.Where(form => form.Name.ToLower().Contains(pattern.ToLower())));
     }
 
-    private async Task<IEnumerable<Rival>> SearchRival(string pattern)
+    private async Task<IEnumerable<Company>> SearchRival(string pattern)
     {
         return await Task.FromResult(Rivals.Where(form => form.Name.ToLower().Contains(pattern.ToLower())));
     }

@@ -1,9 +1,11 @@
-﻿namespace blazorpractice.Models;
+﻿using blazorpractice.Contexts;
+
+namespace blazorpractice.Models;
 
 /// <summary>
-/// Партнер
+/// Связь предприятие/партнер
 /// </summary>
-public class Partner : IHandbook
+public class CompanyPartnerRelation : IHandbook
 {
     /// <inheritdoc cref="IHandbook.Id"/> 
     public int Id { get; set; }
@@ -24,18 +26,24 @@ public class Partner : IHandbook
     /// <inheritdoc cref="IHandbook.Create"/> 
     public void Create()
     {
-        throw new NotImplementedException();
+        var context = new DatabaseContext();
+        context.CompanyPartnerRelations.Add(this);
+        context.SaveChanges();
     }
 
     /// <inheritdoc cref="IHandbook.Edit"/> 
     public void Edit()
     {
-        throw new NotImplementedException();
+        var context = new DatabaseContext();
+        context.CompanyPartnerRelations.Update(this);
+        context.SaveChanges();
     }
 
     /// <inheritdoc cref="IHandbook.Remove"/> 
     public void Remove()
     {
-        throw new NotImplementedException();
+        var context = new DatabaseContext();
+        context.CompanyPartnerRelations.Remove(this);
+        context.SaveChanges();
     }
 }
