@@ -8,7 +8,7 @@
 	<i class="fas fa-plus"></i> Добавить местоположение
 </a>
 
-<ModalView @ref="modalView"></ModalView>
+<ModalView @ref="ModalView"></ModalView>
 
 @if (locations == null || !locations.Any())
 {
@@ -40,7 +40,7 @@ else
 							<a href="/locations/edit/@location.Id" class="btn btn-secondary action-icon" title="Нажмите, чтобы редактировать информацию.">
 								<i class="fas fa-pen"></i>
 							</a>
-							<a class="btn btn-danger action-icon" title="Нажмите, чтобы удалить инфомацию." @onclick='() => modalView.Open(
+							<a class="btn btn-danger action-icon" title="Нажмите, чтобы удалить инфомацию." @onclick='() => ModalView.Open(
 																													title: "Подтверждение удаления",
 																													body: "Данное действие невозможно будет отменить! Вы точно хотите удалить местоположение?",
 																													submitFunc: () => RemoveLocation(location))'>

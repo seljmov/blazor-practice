@@ -10,7 +10,7 @@ public partial class ProductAdd
     private string Name { get; set; }
     private string Description { get; set; }
     private IList<Product> SelectedIngredients { get; set; }
-    private IEnumerable<Product> Ingredients { get; set; }
+    private IList<Product> Ingredients { get; set; }
 
     private bool EndCreated { get; set; } = false;
     private bool SuccessCreated { get; set; } = false;
@@ -32,13 +32,13 @@ public partial class ProductAdd
             };
 
             product.Create();
+            var last = _context.Products.ToList().Last();
             if (SelectedIngredients != null && SelectedIngredients.Any())
             {
-                var last = _context.Products.ToList().Last();
                 foreach (var ingredient in SelectedIngredients)
                 {
                     var relation = new ProductIngredientRelations { ProductId = last.Id, IngredientId = ingredient.Id };
-                    _context.ProductIngredientRelations.Add(relation);
+                    relation.Create();
                 }
                 
                 _context.SaveChanges();
@@ -48,7 +48,6 @@ public partial class ProductAdd
         }
         catch (Exception)
         {
-
         }
 
         SuccessCreated = false;

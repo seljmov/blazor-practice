@@ -23,17 +23,17 @@ public class DatabaseContext : DbContext
     /// <summary>
     /// Словарь связей предприятие/местоположение
     /// </summary>
-    public DbSet<CompanyLocationRelations> CompanyLocationRelations { get; set; }
+    public DbSet<CompanyLocationRelation> CompanyLocationRelations { get; set; }
 
     /// <summary>
     /// Словарь связей предприятие/владелец
     /// </summary>
-    public DbSet<CompanyOwnerRelations> CompanyOwnerRelations { get; set; }
+    public DbSet<CompanyOwnerRelation> CompanyOwnerRelations { get; set; }
 
     /// <summary>
     /// Словарь связей предприятие/продукт
     /// </summary>
-    public DbSet<CompanyProductRelations> CompanyProductRelations { get; set; }
+    public DbSet<CompanyProductRelation> CompanyProductRelations { get; set; }
 
     /// <summary>
     /// Словарь связей предприятие/партнер
@@ -54,11 +54,6 @@ public class DatabaseContext : DbContext
     /// Словарь местоположений
     /// </summary>
     public DbSet<Location> Locations { get; set; }
-
-    /// <summary>
-    /// Словарь логов
-    /// </summary>
-    public DbSet<LogInfo> LogInfos { get; set; }
 
     /// <summary>
     /// Словарь владельцев

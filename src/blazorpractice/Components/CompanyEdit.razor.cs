@@ -7,7 +7,7 @@ namespace blazorpractice.Components;
 
 public partial class CompanyEdit
 {
-    private readonly DatabaseContext _context = new DatabaseContext();
+    private readonly DatabaseContext _context = new();
 
     [Parameter]
     public int Id { get; set; }
@@ -50,7 +50,8 @@ public partial class CompanyEdit
             .Include(c => c.OwnershipForm)
             .Include(c => c.TargetPurpose)
             .Include(c => c.EconomicSector)
-            .ToList().FirstOrDefault(company => company.Id == Id);
+            .ToList()
+            .FirstOrDefault(company => company.Id == Id);
 
         SelectedOwnershipForm = Company.OwnershipForm;
         SelectedTargetPurpose = Company.TargetPurpose;
@@ -122,7 +123,7 @@ public partial class CompanyEdit
 
             foreach (var item in addedLocations)
             {
-                var relation = new CompanyLocationRelations { CompanyId = Company.Id, LocationId = item.Id };
+                var relation = new CompanyLocationRelation { CompanyId = Company.Id, LocationId = item.Id };
                 relation.Create();
             }
 
@@ -137,7 +138,7 @@ public partial class CompanyEdit
 
             foreach (var item in addedOwners)
             {
-                var relation = new CompanyOwnerRelations { CompanyId = Company.Id, OwnerId = item.Id };
+                var relation = new CompanyOwnerRelation { CompanyId = Company.Id, OwnerId = item.Id };
                 relation.Create();
             }
 
@@ -152,7 +153,7 @@ public partial class CompanyEdit
 
             foreach (var item in addedProducts)
             {
-                var relation = new CompanyProductRelations { CompanyId = Company.Id, ProductId = item.Id };
+                var relation = new CompanyProductRelation { CompanyId = Company.Id, ProductId = item.Id };
                 relation.Create();
             }
 
@@ -203,6 +204,8 @@ public partial class CompanyEdit
         SuccessEdit = false;
     }
 
+    #region Validation
+
     private (bool IsHaveEmptyHandbook, string ErrorMessage) CanAddCompanyVerify()
     {
         var names = EmptyHandbooksNames();
@@ -220,10 +223,10 @@ public partial class CompanyEdit
 
         for (int i = 0; i < names.Count - 1; i++)
         {
-            errorMessage += $"«‎{names[i]}», ";
+            errorMessage += $"«{names[i]}», ";
         }
 
-        errorMessage += $"«‎{names.Last()}».";
+        errorMessage += $"«{names.Last()}».";
 
         return (true, errorMessage);
     }
@@ -258,6 +261,10 @@ public partial class CompanyEdit
 
         return names;
     }
+
+    #endregion
+
+    #region Search
 
     private async Task<IEnumerable<OwnershipForm>> SearchOwnershipForm(string pattern)
     {
@@ -298,4 +305,6 @@ public partial class CompanyEdit
     {
         return await Task.FromResult(Rivals.Where(form => form.Name.ToLower().Contains(pattern.ToLower())));
     }
+
+    #endregion
 }

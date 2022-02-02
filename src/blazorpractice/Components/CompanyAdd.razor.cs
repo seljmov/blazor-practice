@@ -60,7 +60,7 @@ public partial class CompanyAdd
             {
                 foreach (var location in SelectedLocations)
                 {
-                    var relation = new CompanyLocationRelations { CompanyId = last.Id, LocationId = location.Id };
+                    var relation = new CompanyLocationRelation { CompanyId = last.Id, LocationId = location.Id };
                     relation.Create();
                 }
             }
@@ -69,7 +69,7 @@ public partial class CompanyAdd
             {
                 foreach (var owner in SelectedOwners)
                 {
-                    var relation = new CompanyOwnerRelations { CompanyId = last.Id, OwnerId = owner.Id };
+                    var relation = new CompanyOwnerRelation { CompanyId = last.Id, OwnerId = owner.Id };
                     relation.Create();
                 }
             }
@@ -78,7 +78,7 @@ public partial class CompanyAdd
             {
                 foreach (var product in SelectedProducts)
                 {
-                    var relation = new CompanyProductRelations { CompanyId = last.Id, ProductId = product.Id };
+                    var relation = new CompanyProductRelation { CompanyId = last.Id, ProductId = product.Id };
                     relation.Create();
                 }
             }
@@ -112,6 +112,8 @@ public partial class CompanyAdd
 
         SuccessCreated = false;
     }
+
+    #region Validation
 
     private (bool IsHaveEmptyHandbook, string ErrorMessage) CanAddCompanyVerify()
     {
@@ -169,6 +171,10 @@ public partial class CompanyAdd
         return names;
     }
 
+    #endregion
+
+    #region Search
+
     private async Task<IEnumerable<OwnershipForm>> SearchOwnershipForm(string pattern)
     {
         return await Task.FromResult(OwnershipForms.Where(form => form.Name.ToLower().Contains(pattern.ToLower())));
@@ -208,4 +214,6 @@ public partial class CompanyAdd
     {
         return await Task.FromResult(Rivals.Where(form => form.Name.ToLower().Contains(pattern.ToLower())));
     }
+
+    #endregion
 }

@@ -14,7 +14,7 @@ public partial class ProductEdit
     private Product Product { get; set; }
     private IList<Product> BeforeEditSelectedIngredients { get; set; }
     private IList<Product> SelectedIngredients { get; set; }
-    private IEnumerable<Product> Ingredients { get; set; }
+    private IList<Product> Ingredients { get; set; }
 
     private bool EndEdit { get; set; } = false;
     private bool SuccessEdit { get; set; } = false;
@@ -50,13 +50,13 @@ public partial class ProductEdit
             foreach (var ingredient in addedIngredients)
             {
                 var relation = new ProductIngredientRelations { ProductId = Id, IngredientId = ingredient.Id };
-                _context.ProductIngredientRelations.Add(relation);
+                relation.Create();
             }
 
             foreach (var ingredient in removedIngredients)
             {
                 var relation = _context.ProductIngredientRelations.Where(x => x.ProductId == Id && x.IngredientId == ingredient.Id).First();
-                _context.ProductIngredientRelations.Remove(relation);
+                relation.Remove();
             }
 
             _context.SaveChanges();
@@ -64,9 +64,8 @@ public partial class ProductEdit
             SuccessEdit = true;
             return;
         }
-        catch (Exception e)
+        catch (Exception)
         {
-
         }
 
         SuccessEdit = false;

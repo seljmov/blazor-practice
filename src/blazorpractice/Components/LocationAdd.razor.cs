@@ -29,7 +29,6 @@ public partial class LocationAdd
         }
         catch (Exception)
         {
-
         }
 
         SuccessCreated = false;

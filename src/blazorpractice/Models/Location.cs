@@ -6,12 +6,12 @@ namespace blazorpractice.Models;
 /// <summary>
 /// Местоположение
 /// </summary>
-public class Location : IHandbook
+public class Location : IHandbookBase, INameable
 {
-    /// <inheritdoc cref="IHandbook.Id"/> 
+    /// <inheritdoc cref="IReadOnlyHandbook.Id"/> 
     public int Id { get; set; }
 
-    /// <inheritdoc cref="IHandbook.Name"/> 
+    /// <inheritdoc cref="INameable.Name"/> 
     public string Name { get; set; }
 
     /// <summary>
@@ -24,7 +24,7 @@ public class Location : IHandbook
     /// </summary>
     public string Comment { get; set; }
 
-    /// <inheritdoc cref="IHandbook.Create"/> 
+    /// <inheritdoc cref="IHandbookBase.Create"/> 
     public void Create()
     {
         var context = new DatabaseContext();
@@ -32,7 +32,7 @@ public class Location : IHandbook
         context.SaveChanges();
     }
 
-    /// <inheritdoc cref="IHandbook.Edit"/> 
+    /// <inheritdoc cref="IHandbookBase.Edit"/> 
     public void Edit()
     {
         var context = new DatabaseContext();
@@ -40,7 +40,7 @@ public class Location : IHandbook
         context.SaveChanges();
     }
 
-    /// <inheritdoc cref="IHandbook.Remove"/> 
+    /// <inheritdoc cref="IHandbookBase.Remove"/> 
     public void Remove()
     {
         var context = new DatabaseContext();

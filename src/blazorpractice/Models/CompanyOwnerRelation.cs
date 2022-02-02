@@ -5,13 +5,10 @@ namespace blazorpractice.Models;
 /// <summary>
 /// Связь компания/владелеца
 /// </summary>
-public class CompanyOwnerRelations : IHandbook
+public class CompanyOwnerRelation : IHandbookBase
 {
-    /// <inheritdoc cref="IHandbook.Id"/> 
+    /// <inheritdoc cref="IReadOnlyHandbook.Id"/> 
     public int Id { get; set; }
-
-    /// <inheritdoc cref="IHandbook.Name"/> 
-    public string Name { get; set; }
 
     /// <summary>
     /// Идентификатор предприятия
@@ -23,7 +20,7 @@ public class CompanyOwnerRelations : IHandbook
     /// </summary>
     public int OwnerId { get; set; }
 
-    /// <inheritdoc cref="IHandbook.Create"/> 
+    /// <inheritdoc cref="IHandbookBase.Create"/> 
     public void Create()
     {
         var context = new DatabaseContext();
@@ -31,7 +28,7 @@ public class CompanyOwnerRelations : IHandbook
         context.SaveChanges();
     }
 
-    /// <inheritdoc cref="IHandbook.Edit"/> 
+    /// <inheritdoc cref="IHandbookBase.Edit"/> 
     public void Edit()
     {
         var context = new DatabaseContext();
@@ -39,7 +36,7 @@ public class CompanyOwnerRelations : IHandbook
         context.SaveChanges();
     }
 
-    /// <inheritdoc cref="IHandbook.Remove"/> 
+    /// <inheritdoc cref="IHandbookBase.Remove"/> 
     public void Remove()
     {
         var context = new DatabaseContext();

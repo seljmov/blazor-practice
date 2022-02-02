@@ -1,15 +1,14 @@
-﻿namespace blazorpractice.Models;
+﻿using blazorpractice.Contexts;
+
+namespace blazorpractice.Models;
 
 /// <summary>
 /// Связь продукт/ингредиент
 /// </summary>
-public class ProductIngredientRelations : IHandbook
+public class ProductIngredientRelations : IHandbookBase
 {
-    /// <inheritdoc cref="IHandbook.Id"/> 
+    /// <inheritdoc cref="IReadOnlyHandbook.Id"/> 
     public int Id { get; set; }
-
-    /// <inheritdoc cref="IHandbook.Name"/> 
-    public string Name { get; set; }
 
     /// <summary>
     /// Идентификатор продукта
@@ -21,21 +20,27 @@ public class ProductIngredientRelations : IHandbook
     /// </summary>
     public int IngredientId { get; set; }
 
-    /// <inheritdoc cref="IHandbook.Create"/> 
+    /// <inheritdoc cref="IHandbookBase.Create"/> 
     public void Create()
     {
-        throw new NotImplementedException();
+        var context = new DatabaseContext();
+        context.ProductIngredientRelations.Add(this);
+        context.SaveChanges();
     }
 
-    /// <inheritdoc cref="IHandbook.Edit"/> 
+    /// <inheritdoc cref="IHandbookBase.Edit"/> 
     public void Edit()
     {
-        throw new NotImplementedException();
+        var context = new DatabaseContext();
+        context.ProductIngredientRelations.Update(this);
+        context.SaveChanges();
     }
 
-    /// <inheritdoc cref="IHandbook.Remove"/> 
+    /// <inheritdoc cref="IHandbookBase.Remove"/> 
     public void Remove()
     {
-        throw new NotImplementedException();
+        var context = new DatabaseContext();
+        context.ProductIngredientRelations.Remove(this);
+        context.SaveChanges();
     }
 }
