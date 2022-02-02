@@ -9,6 +9,14 @@ else
 	<div style="width: 640px;display: block;margin-left: auto;margin-right: auto; margin-bottom: 4rem;">
 		<h4 class="mb-4">Изменить информацию о продукте</h4>
 
+        @if (EndEdit)
+		{
+			<div class="alert @(SuccessEdit ? "alert-success" : "alert-danger") mb-4" role="alert">
+			  <b>@(SuccessEdit ? "Отлично!" : "Ошибка!")</b> <br>
+			  @(SuccessEdit ? "Вы успешно изменили информацию о продукте!" : "При изменении информации о продукте что-то пошло не так...")
+			</div>
+		}
+
 		<div class="form-group mb-4">
 		    <label>Название</label>
 		    <input class="form-control" @bind="@Product.Name">
@@ -22,10 +30,10 @@ else
         <div class="form-group mb-4">
             <label>Материалы (необязательно)</label>
             <BlazoredTypeahead 
-                                SearchMethod="@SearchProduct" 
+                                SearchMethod="@SearchIngredient" 
                                 EnableDropDown="true"
                                 ShowDropDownOnFocus="true"
-                                @bind-Values="@SelectedProducts" 
+                                @bind-Values="@SelectedIngredients" 
                                 Placeholder="Укажите один и более материалов...">
                 <SelectedTemplate>
                     @context.Name
@@ -38,6 +46,10 @@ else
                 </NotFoundTemplate>
             </BlazoredTypeahead>
         </div>
+
+        <div>
+			<button type="submit" class="btn btn-success" @onclick=@EditProduct disabled="@(EndEdit && SuccessEdit)">Сохранить</button>
+		</div>
 	</div>
 }
 

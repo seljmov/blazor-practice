@@ -9,16 +9,53 @@ public partial class ProductAdd
 
     private string Name { get; set; }
     private string Description { get; set; }
-    private IList<Product> SelectedProducts { get; set; }
-    private IEnumerable<Product> Products { get; set; }
+    private IList<Product> SelectedIngredients { get; set; }
+    private IEnumerable<Product> Ingredients { get; set; }
 
-    protected override void OnInitialized()
+    private bool EndCreated { get; set; } = false;
+    private bool SuccessCreated { get; set; } = false;
+
+    protected override void OnParametersSet()
     {
-        Products = _context.Products.ToList();
+        Ingredients = _context.Products.ToList();
     }
 
-    private async Task<IEnumerable<Product>> SearchProduct(string pattern)
+    private void CreateProduct()
     {
-        return await Task.FromResult(Products.Where(form => form.Name.ToLower().Contains(pattern.ToLower())));
+        EndCreated = true;
+        try
+        {
+            var product = new Product 
+            {
+                Name = Name,
+                Description = Description,
+            };
+
+            product.Create();
+            if (SelectedIngredients != null && SelectedIngredients.Any())
+            {
+                var last = _context.Products.ToList().Last();
+                foreach (var ingredient in SelectedIngredients)
+                {
+                    var relation = new ProductIngredientRelations { ProductId = last.Id, IngredientId = ingredient.Id };
+                    _context.ProductIngredientRelations.Add(relation);
+                }
+                
+                _context.SaveChanges();
+            }
+            SuccessCreated = true;
+            return;
+        }
+        catch (Exception)
+        {
+
+        }
+
+        SuccessCreated = false;
+    }
+
+    private async Task<IEnumerable<Product>> SearchIngredient(string pattern)
+    {
+        return await Task.FromResult(Ingredients.Where(form => form.Name.ToLower().Contains(pattern.ToLower())));
     }
 }

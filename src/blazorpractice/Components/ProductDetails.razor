@@ -1,0 +1,57 @@
+﻿@page "/products/details/{Id:int}"
+
+@if (Product == null)
+{
+	<b>Продукта не существует!</b>
+}
+else
+{
+	<div style="width: 640px;display: block;margin-left: auto;margin-right: auto; margin-bottom: 4rem;">
+		<h4 class="mb-4">Информацию о продукте</h4>
+
+		<div class="mb-2">
+			Название: <b>@Product.Name</b>
+		</div>
+
+		@if (Product.Description != null)
+		{
+			<div class="mb-2">
+				Описание: <b>@Product.Description</b>
+			</div>
+		}
+
+		<div class="mb-2">
+            @if (Ingredients == null || !Ingredients.Any())
+            {
+                <div>
+                    Материал, из которого состоит: <b>Не указано</b>
+                </div>
+            }
+            else
+            {
+                @if (Ingredients.Count() == 1)
+                {
+                    <div>
+                        Материал, из которого состоит: <a href="/products/details/@Ingredients.First().Id"><b>@Ingredients.First().Name</b></a>
+                    </div>
+                }
+                else
+                {
+                    <div>
+                        Материалы, из которых состоит:
+                    </div>
+                    <ul>
+                        @foreach (var ingredient in Ingredients)
+                        {
+                            <li>
+                                <a href="/products/details/@ingredient.Id">
+                                    <b>@ingredient.Name</b>
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                }
+            }
+        </div>
+	</div>
+}

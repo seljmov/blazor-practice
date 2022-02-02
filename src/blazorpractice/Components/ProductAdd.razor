@@ -3,6 +3,14 @@
 <div style="width: 640px;display: block;margin-left: auto;margin-right: auto; margin-bottom: 4rem;">
 	<h4 class="mb-4">Добавить новый продукт</h4>
 
+    @if (EndCreated)
+    {
+        <div class="alert @(SuccessCreated ? "alert-success" : "alert-danger") mb-4" role="alert">
+          <b>@(SuccessCreated ? "Отлично!" : "Ошибка!")</b> <br>
+          @(SuccessCreated ? "Вы успешно создали новый продукт!" : "При создании нового продукта что-то пошло не так...")
+        </div>
+    }
+
 	<div class="form-group mb-4">
 		<label>Название</label>
 		<input class="form-control" @bind="@Name">
@@ -14,13 +22,13 @@
 	</div>
 
     <div class="form-group mb-4">
-        <label>Материалы (необязательно)</label>
+        <label>Материалы, из которых состоит продукт (необязательно)</label>
         <BlazoredTypeahead 
-                            SearchMethod="@SearchProduct" 
+                            SearchMethod="@SearchIngredient" 
                             EnableDropDown="true"
                             ShowDropDownOnFocus="true"
-                            @bind-Values="@SelectedProducts" 
-                            Placeholder="Укажите один и более материалов...">
+                            @bind-Values="@SelectedIngredients" 
+                            Placeholder="Укажите один и более материал...">
             <SelectedTemplate>
                 @context.Name
             </SelectedTemplate>
@@ -31,6 +39,10 @@
                 Ничего не найдено.
             </NotFoundTemplate>
         </BlazoredTypeahead>
+    </div>
+
+    <div>
+        <button type="submit" class="btn btn-success" @onclick=@CreateProduct disabled="@(EndCreated && SuccessCreated)">Сохранить</button>
     </div>
 </div>
 

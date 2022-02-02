@@ -41,11 +41,6 @@ public class DatabaseContext : DbContext
     public DbSet<EconomicSector> EconomicSectors { get; set; }
 
     /// <summary>
-    /// Словарь ингредиентов продуктов
-    /// </summary>
-    public DbSet<Ingredient> Ingredients { get; set; }
-
-    /// <summary>
     /// Словарь местоположений
     /// </summary>
     public DbSet<Location> Locations { get; set; }
