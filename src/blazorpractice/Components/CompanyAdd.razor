@@ -13,6 +13,14 @@
         </div>
     }
 
+    @if (EndCreated)
+    {
+        <div class="alert @(SuccessCreated ? "alert-success" : "alert-danger") mb-4" role="alert">
+          <b>@(SuccessCreated ? "Отлично!" : "Ошибка!")</b> <br>
+          @(SuccessCreated ? "Вы успешно создали новое предприятие!" : "При создании нового предприятия что-то пошло не так...")
+        </div>
+    }
+
 	<div>
 		<div class="form-group mb-4">
             <label>Название</label>
@@ -172,7 +180,7 @@
         </div>
 
         <div>
-            <button type="submit" class="btn btn-success" disabled="@CanAddCompanyVerify().IsHaveEmptyHandbook">Сохранить</button>
+            <button type="submit" class="btn btn-success" @onclick=@CreateCompany disabled="@(CanAddCompanyVerify().IsHaveEmptyHandbook || EndCreated && SuccessCreated)">Сохранить</button>
         </div>
 	</div>
 </div>

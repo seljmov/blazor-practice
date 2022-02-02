@@ -1,4 +1,6 @@
-﻿namespace blazorpractice.Models;
+﻿using blazorpractice.Contexts;
+
+namespace blazorpractice.Models;
 
 /// <summary>
 /// Связь предприятие/продукт
@@ -24,18 +26,24 @@ public class CompanyProductRelations : IHandbook
     /// <inheritdoc cref="IHandbook.Create"/> 
     public void Create()
     {
-        throw new NotImplementedException();
+        var context = new DatabaseContext();
+        context.CompanyProductRelations.Add(this);
+        context.SaveChanges();
     }
 
     /// <inheritdoc cref="IHandbook.Edit"/> 
     public void Edit()
     {
-        throw new NotImplementedException();
+        var context = new DatabaseContext();
+        context.CompanyProductRelations.Update(this);
+        context.SaveChanges();
     }
 
     /// <inheritdoc cref="IHandbook.Remove"/> 
     public void Remove()
     {
-        throw new NotImplementedException();
+        var context = new DatabaseContext();
+        context.CompanyProductRelations.Remove(this);
+        context.SaveChanges();
     }
 }

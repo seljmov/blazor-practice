@@ -14,8 +14,8 @@ public partial class CompanyAdd
     private IList<Location> SelectedLocations { get; set; }
     private IList<Product> SelectedProducts { get; set; }
     private IList<Owner> SelectedOwners { get; set; }
-    private IList<Partner> SelectedPartners { get; set; }
-    private IList<Rival> SelectedRivals { get; set; }
+    private IList<Company> SelectedPartners { get; set; }
+    private IList<Company> SelectedRivals { get; set; }
 
     private IEnumerable<OwnershipForm> OwnershipForms { get; set; }
     private IEnumerable<TargetPurpose> TargetPurposes { get; set; }
@@ -23,10 +23,13 @@ public partial class CompanyAdd
     private IEnumerable<Location> Locations { get; set; }
     private IEnumerable<Product> Products { get; set; }
     private IEnumerable<Owner> Owners { get; set; }
-    private IEnumerable<Partner> Partners { get; set; }
-    private IEnumerable<Rival> Rivals { get; set; }
+    private IEnumerable<Company> Partners { get; set; }
+    private IEnumerable<Company> Rivals { get; set; }
 
-    protected override void OnInitialized()
+    private bool EndCreated { get; set; } = false;
+    private bool SuccessCreated { get; set; } = false;
+
+    protected override void OnParametersSet()
     {
         OwnershipForms = _context.OwnershipForms.ToList();
         TargetPurposes = _context.TargetPurposes.ToList();
@@ -34,8 +37,80 @@ public partial class CompanyAdd
         Locations = _context.Locations.ToList();
         Products = _context.Products.ToList();
         Owners = _context.Owners.ToList();
-        Partners = _context.Partners.ToList();
-        Rivals = _context.Rivals.ToList();
+        Partners = _context.Companies.ToList();
+        Rivals = _context.Companies.ToList();
+    }
+
+    private void CreateCompany()
+    {
+        EndCreated = true;
+        var company = new Company
+        {
+            Name = Name,
+            OwnershipFormId = SelectedOwnershipForm.Id,
+            TargetPurposeId = SelectedTargetPurpose.Id,
+            EconomicSectorId = SelectedEconomicSector.Id,
+        };
+
+        try
+        {
+            company.Create();
+            var last = _context.Companies.ToList().Last();
+            if (SelectedLocations != null && SelectedLocations.Any())
+            {
+                foreach (var location in SelectedLocations)
+                {
+                    var relation = new CompanyLocationRelations { CompanyId = last.Id, LocationId = location.Id };
+                    relation.Create();
+                }
+            }
+
+            if (SelectedOwners != null && SelectedOwners.Any())
+            {
+                foreach (var owner in SelectedOwners)
+                {
+                    var relation = new CompanyOwnerRelations { CompanyId = last.Id, OwnerId = owner.Id };
+                    relation.Create();
+                }
+            }
+
+            if (SelectedProducts != null && SelectedProducts.Any())
+            {
+                foreach (var product in SelectedProducts)
+                {
+                    var relation = new CompanyProductRelations { CompanyId = last.Id, ProductId = product.Id };
+                    relation.Create();
+                }
+            }
+
+            if (SelectedPartners != null && SelectedPartners.Any())
+            {
+                foreach (var partner in SelectedPartners)
+                {
+                    var relation = new CompanyPartnerRelation { CompanyId = last.Id, CompanyPartnerId = partner.Id };
+                    relation.Create();
+                }
+            }
+
+            if (SelectedRivals != null && SelectedRivals.Any())
+            {
+                foreach (var rival in SelectedRivals)
+                {
+                    var relation = new CompanyRivalRelation { CompanyId = last.Id, CompanyRivalId = rival.Id };
+                    relation.Create();
+                }
+            }
+
+            _context.SaveChanges();
+            SuccessCreated = true;
+            return;
+        }
+        catch (Exception)
+        {
+            company.Remove();
+        }
+
+        SuccessCreated = false;
     }
 
     private (bool IsHaveEmptyHandbook, string ErrorMessage) CanAddCompanyVerify()
@@ -55,10 +130,10 @@ public partial class CompanyAdd
 
         for (int i = 0; i < names.Count - 1; i++)
         {
-            errorMessage += $"«‎{names[i]}», ";
+            errorMessage += $"«{names[i]}», ";
         }
 
-        errorMessage += $"«‎{names.Last()}».";
+        errorMessage += $"«{names.Last()}».";
 
         return (true, errorMessage);
     }
@@ -76,20 +151,20 @@ public partial class CompanyAdd
         if (EconomicSectors == null || !EconomicSectors.Any())
             names.Add("Отрасль экономики");
 
-        if (Locations == null || !Locations.Any())
-            names.Add("Местоположения");
+        //if (Locations == null || !Locations.Any())
+        //    names.Add("Местоположения");
 
-        if (Products == null || !Products.Any())
-            names.Add("Продукты предприятий");
+        //if (Products == null || !Products.Any())
+        //    names.Add("Продукты предприятий");
 
-        if (Owners == null || !Owners.Any())
-            names.Add("Владельцы");
+        //if (Owners == null || !Owners.Any())
+        //    names.Add("Владельцы");
 
-        if (Partners == null || !Partners.Any())
-            names.Add("Партнеры");
+        //if (Partners == null || !Partners.Any())
+        //    names.Add("Партнеры");
 
-        if (Rivals == null || !Rivals.Any())
-            names.Add("Конкуренты");
+        //if (Rivals == null || !Rivals.Any())
+        //    names.Add("Конкуренты");
 
         return names;
     }
@@ -124,12 +199,12 @@ public partial class CompanyAdd
         return await Task.FromResult(Owners.Where(form => form.Name.ToLower().Contains(pattern.ToLower())));
     }
 
-    private async Task<IEnumerable<Partner>> SearchPartner(string pattern)
+    private async Task<IEnumerable<Company>> SearchPartner(string pattern)
     {
         return await Task.FromResult(Partners.Where(form => form.Name.ToLower().Contains(pattern.ToLower())));
     }
 
-    private async Task<IEnumerable<Rival>> SearchRival(string pattern)
+    private async Task<IEnumerable<Company>> SearchRival(string pattern)
     {
         return await Task.FromResult(Rivals.Where(form => form.Name.ToLower().Contains(pattern.ToLower())));
     }

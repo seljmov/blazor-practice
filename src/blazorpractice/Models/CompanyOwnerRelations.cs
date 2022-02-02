@@ -1,4 +1,6 @@
-﻿namespace blazorpractice.Models;
+﻿using blazorpractice.Contexts;
+
+namespace blazorpractice.Models;
 
 /// <summary>
 /// Связь компания/владелеца
@@ -24,18 +26,24 @@ public class CompanyOwnerRelations : IHandbook
     /// <inheritdoc cref="IHandbook.Create"/> 
     public void Create()
     {
-        throw new NotImplementedException();
+        var context = new DatabaseContext();
+        context.CompanyOwnerRelations.Add(this);
+        context.SaveChanges();
     }
 
     /// <inheritdoc cref="IHandbook.Edit"/> 
     public void Edit()
     {
-        throw new NotImplementedException();
+        var context = new DatabaseContext();
+        context.CompanyOwnerRelations.Update(this);
+        context.SaveChanges();
     }
 
     /// <inheritdoc cref="IHandbook.Remove"/> 
     public void Remove()
     {
-        throw new NotImplementedException();
+        var context = new DatabaseContext();
+        context.CompanyOwnerRelations.Remove(this);
+        context.SaveChanges();
     }
 }

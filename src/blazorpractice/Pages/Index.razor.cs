@@ -8,25 +8,24 @@ namespace blazorpractice.Pages;
 
 public partial class Index : ComponentBase
 {
-    private readonly DatabaseContext _context = new DatabaseContext();
+    private readonly DatabaseContext _context = new();
 
-    private ModalView modalView { get; set; }
+    private ModalView ModalView { get; set; }
     private IEnumerable<Company> _companies;
 
-    protected override void OnInitialized()
+    protected override void OnParametersSet()
     {
         _companies = _context.Companies
             .Include(c => c.OwnershipForm)
             .Include(c => c.TargetPurpose)
             .Include(c => c.EconomicSector)
             .ToList();
-
-        base.OnInitialized();
+        _companies = _companies.Reverse();
     }
 
     private void RemoveCompany(Company company)
     {
-        _context.Companies.Remove(company);
+        company.Remove();
         _context.SaveChanges();
         _companies = _companies.Where(x => x.Id != company.Id);
         StateHasChanged();

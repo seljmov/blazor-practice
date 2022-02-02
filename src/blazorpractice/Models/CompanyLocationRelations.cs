@@ -1,4 +1,6 @@
-﻿namespace blazorpractice.Models;
+﻿using blazorpractice.Contexts;
+
+namespace blazorpractice.Models;
 
 /// <summary>
 /// Связь предприятие/местоположение
@@ -24,18 +26,24 @@ public class CompanyLocationRelations : IHandbook
     /// <inheritdoc cref="IHandbook.Create"/> 
     public void Create()
     {
-        throw new NotImplementedException();
+        var context = new DatabaseContext();
+        context.CompanyLocationRelations.Add(this);
+        context.SaveChanges();
     }
 
     /// <inheritdoc cref="IHandbook.Edit"/> 
     public void Edit()
     {
-        throw new NotImplementedException();
+        var context = new DatabaseContext();
+        context.CompanyLocationRelations.Update(this);
+        context.SaveChanges();
     }
 
     /// <inheritdoc cref="IHandbook.Remove"/> 
     public void Remove()
     {
-        throw new NotImplementedException();
+        var context = new DatabaseContext();
+        context.CompanyLocationRelations.Remove(this);
+        context.SaveChanges();
     }
 }
