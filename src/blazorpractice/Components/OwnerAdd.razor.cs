@@ -41,10 +41,13 @@ public partial class OwnerAdd
 
             owner.Create();
             var last = _context.Owners.ToList().Last();
-            foreach (var company in SelectedCompanies)
+            if (SelectedCompanies != null && SelectedCompanies.Any())
             {
-                var relation = new CompanyOwnerRelation { OwnerId = last.Id, CompanyId = company.Id };
-                relation.Create();
+                foreach (var company in SelectedCompanies)
+                {
+                    var relation = new CompanyOwnerRelation { OwnerId = last.Id, CompanyId = company.Id };
+                    relation.Create();
+                }
             }
 
             _context.SaveChanges();
