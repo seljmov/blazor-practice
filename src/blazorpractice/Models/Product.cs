@@ -1,4 +1,7 @@
-﻿namespace blazorpractice.Models;
+﻿using blazorpractice.Contexts;
+using Microsoft.EntityFrameworkCore;
+
+namespace blazorpractice.Models;
 
 /// <summary>
 /// Продукт предприятия
@@ -19,18 +22,24 @@ public class Product : IHandbook
     /// <inheritdoc cref="IHandbook.Create"/> 
     public void Create()
     {
-        throw new NotImplementedException();
+        var context = new DatabaseContext();
+        context.Products.Add(this);
+        context.SaveChanges();
     }
 
     /// <inheritdoc cref="IHandbook.Edit"/> 
     public void Edit()
     {
-        throw new NotImplementedException();
+        var context = new DatabaseContext();
+        context.Products.Update(this);
+        context.SaveChanges();
     }
 
     /// <inheritdoc cref="IHandbook.Remove"/> 
     public void Remove()
     {
-        throw new NotImplementedException();
+        var context = new DatabaseContext();
+        context.Database.ExecuteSqlInterpolated($"execute DeleteProduct @id = {Id}");
+        context.SaveChanges();
     }
 }

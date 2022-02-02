@@ -11,17 +11,15 @@ public partial class Products
     private ModalView ModalView { get; set; }
     private IEnumerable<Product> products;
 
-    protected override void OnInitialized()
+    protected override void OnParametersSet()
     {
         products = _context.Products.ToList();
-
-        base.OnInitialized();
+        products = products.Reverse();
     }
 
     private void RemoveProduct(Product product)
     {
-        _context.Products.Remove(product);
-        _context.SaveChanges();
+        product.Remove();
         products = products.Where(x => x.Id != product.Id);
         StateHasChanged();
     }
