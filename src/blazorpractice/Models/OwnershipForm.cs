@@ -3,29 +3,11 @@
 /// <summary>
 /// Форма собственности
 /// </summary>
-public class OwnershipForm : IHandbook
+public class OwnershipForm : IReadOnlyHandbook, INameable
 {
-    /// <inheritdoc cref="IHandbook.Id"/> 
+    /// <inheritdoc cref="IReadOnlyHandbook.Id"/> 
     public int Id { get; set; }
 
-    /// <inheritdoc cref="IHandbook.Name"/> 
+    /// <inheritdoc cref="INameable.Name"/> 
     public string Name { get; set; }
-
-    /// <inheritdoc cref="IHandbook.Create"/> 
-    public void Create()
-    {
-        throw new NotImplementedException();
-    }
-
-    /// <inheritdoc cref="IHandbook.Edit"/> 
-    public void Edit()
-    {
-        throw new NotImplementedException();
-    }
-
-    /// <inheritdoc cref="IHandbook.Remove"/> 
-    public void Remove()
-    {
-        throw new NotImplementedException();
-    }
 }

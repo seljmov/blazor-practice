@@ -6,22 +6,21 @@ namespace blazorpractice.Components;
 
 public partial class Locations
 {
-    private readonly DatabaseContext _context = new DatabaseContext();
+    private readonly DatabaseContext _context = new();
 
-    private ModalView modalView { get; set; }
-    private IEnumerable<Location> locations;
+    private ModalView ModalView { get; set; }
+    private IList<Location> locations;
 
-    protected override void OnInitialized()
+    protected override void OnParametersSet()
     {
         locations = _context.Locations.ToList();
-
-        base.OnInitialized();
+        locations = locations.Reverse().ToList();
     }
 
     private void RemoveLocation(Location location)
     {
         location.Remove();
-        locations = locations.Where(x => x.Id != location.Id);
+        locations.Remove(location);
         StateHasChanged();
     }
 }

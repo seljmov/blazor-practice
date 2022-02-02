@@ -3,28 +3,28 @@
 /// <summary>
 /// Целевое назначение
 /// </summary>
-public class TargetPurpose : IHandbook
+public class TargetPurpose : IHandbookBase, INameable
 {
-    /// <inheritdoc cref="IHandbook.Id"/> 
+    /// <inheritdoc cref="IReadOnlyHandbook.Id"/> 
     public int Id { get; set; }
 
-    /// <inheritdoc cref="IHandbook.Name"/> 
+    /// <inheritdoc cref="INameable.Name"/> 
     public string Name { get; set; }
 
 
-    /// <inheritdoc cref="IHandbook.Create"/> 
+    /// <inheritdoc cref="IHandbookBase.Create"/> 
     public void Create()
     {
         throw new NotImplementedException();
     }
 
-    /// <inheritdoc cref="IHandbook.Edit"/> 
+    /// <inheritdoc cref="IHandbookBase.Edit"/> 
     public void Edit()
     {
         throw new NotImplementedException();
     }
 
-    /// <inheritdoc cref="IHandbook.Remove"/> 
+    /// <inheritdoc cref="IHandbookBase.Remove"/> 
     public void Remove()
     {
         throw new NotImplementedException();

@@ -15,12 +15,12 @@ public partial class OwnerEdit
 
     private IList<Company> BeforeEditSelectedCompanies { get; set; }
     private IList<Company> SelectedCompanies { get; set; }
-    private IEnumerable<Company> Companies { get; set; }
+    private IList<Company> Companies { get; set; }
 
     private bool EndEdit { get; set; } = false;
     private bool SuccessEdit { get; set; } = false;
 
-    protected override void OnInitialized()
+    protected override void OnParametersSet()
     {
         Owner = _context.Owners.ToList().FirstOrDefault(x => x.Id == Id);
 
@@ -43,21 +43,23 @@ public partial class OwnerEdit
             var removedCompanies = BeforeEditSelectedCompanies.Where(company => !SelectedCompanies.Contains(company)).ToList();
 
             foreach (var company in addedCompanies)
-                _context.CompanyOwnerRelations.Add(new CompanyOwnerRelations { CompanyId = company.Id, OwnerId = Owner.Id });
+            {
+                var relation = new CompanyOwnerRelation { CompanyId = company.Id, OwnerId = Owner.Id };
+                relation.Create();
+            }
 
             foreach (var company in removedCompanies)
             {
                 var relation = _context.CompanyOwnerRelations.Where(x => x.CompanyId == company.Id && Owner.Id == Owner.Id).First();
-                _context.CompanyOwnerRelations.Remove(relation);
+                relation.Remove();
             }
 
             _context.SaveChanges();
             SuccessEdit = true;
             return;
         }
-        catch (Exception e)
+        catch (Exception)
         {
-
         }
 
         SuccessEdit = false;

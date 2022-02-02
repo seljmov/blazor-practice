@@ -16,9 +16,9 @@ public partial class LocationEdit
     private bool EndEdit { get; set; } = false;
     private bool SuccessEdit { get; set; } = false;
 
-    protected override void OnInitialized()
+    protected override void OnParametersSet()
     {
-        Location = _context.Locations.ToList().FirstOrDefault(location => location.Id == Id);
+        Location = _context.Locations.Where(x => x.Id == Id).FirstOrDefault();
     }
 
     private void EditLocation()
@@ -32,7 +32,6 @@ public partial class LocationEdit
         }
         catch (Exception)
         {
-
         }
 
         SuccessEdit = false;

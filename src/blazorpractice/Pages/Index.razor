@@ -10,7 +10,7 @@
 
 <ModalView @ref="ModalView"></ModalView>
 
-@if (_companies == null || !_companies.Any())
+@if (companies == null || !companies.Any())
 {
 	<p><em>Список предприятий пуст...</em></p>
 }
@@ -28,7 +28,7 @@ else
 			</tr>
 		</thead>
 		<tbody>
-			@foreach (var company in _companies)
+			@foreach (var company in companies)
 			{
 				<tr>
 					<td>@company.Name</td>

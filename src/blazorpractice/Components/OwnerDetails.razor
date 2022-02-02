@@ -45,10 +45,10 @@ else
             }
             else
             {
-                @if (Companies.Count() == 1)
+                @if (Companies.Count == 1)
                 {
                     <div>
-                        Предприятие, которым владеет: <b>@Companies.First().Name</b>
+                        Предприятие, которым владеет: <a href="/company/details/@Companies.First().Id"><b>@Companies.First().Name</b></a>
                     </div>
                 }
                 else

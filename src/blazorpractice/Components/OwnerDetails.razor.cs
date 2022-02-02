@@ -14,7 +14,7 @@ public partial class OwnerDetails
     private Owner Owner;
     private IList<Company> Companies { get; set; }
 
-    protected override void OnInitialized()
+    protected override void OnParametersSet()
     {
         Owner = _context.Owners.ToList().FirstOrDefault(x => x.Id == Id);
 

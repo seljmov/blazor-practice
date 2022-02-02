@@ -3,9 +3,9 @@
 namespace blazorpractice.Models;
 
 /// <summary>
-/// Связь предприятие/партнер
+/// Связь предприятие/продукт
 /// </summary>
-public class CompanyPartnerRelation : IHandbookBase
+public class CompanyProductRelation : IHandbookBase
 {
     /// <inheritdoc cref="IReadOnlyHandbook.Id"/> 
     public int Id { get; set; }
@@ -16,15 +16,15 @@ public class CompanyPartnerRelation : IHandbookBase
     public int CompanyId { get; set; }
 
     /// <summary>
-    /// Идентификатор предприятия-партнера
+    /// Идентификатор производимого продукта
     /// </summary>
-    public int CompanyPartnerId { get; set; }
+    public int ProductId { get; set; }
 
     /// <inheritdoc cref="IHandbookBase.Create"/> 
     public void Create()
     {
         var context = new DatabaseContext();
-        context.CompanyPartnerRelations.Add(this);
+        context.CompanyProductRelations.Add(this);
         context.SaveChanges();
     }
 
@@ -32,7 +32,7 @@ public class CompanyPartnerRelation : IHandbookBase
     public void Edit()
     {
         var context = new DatabaseContext();
-        context.CompanyPartnerRelations.Update(this);
+        context.CompanyProductRelations.Update(this);
         context.SaveChanges();
     }
 
@@ -40,7 +40,7 @@ public class CompanyPartnerRelation : IHandbookBase
     public void Remove()
     {
         var context = new DatabaseContext();
-        context.CompanyPartnerRelations.Remove(this);
+        context.CompanyProductRelations.Remove(this);
         context.SaveChanges();
     }
 }

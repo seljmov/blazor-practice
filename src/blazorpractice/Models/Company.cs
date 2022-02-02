@@ -6,12 +6,12 @@ namespace blazorpractice.Models;
 /// <summary>
 /// Промышленное предприятие
 /// </summary>
-public class Company : IHandbook
+public class Company : IHandbookBase, INameable
 {
-    /// <inheritdoc cref="IHandbook.Id"/> 
+    /// <inheritdoc cref="IReadOnlyHandbook.Id"/> 
     public int Id { get; set; }
 
-    /// <inheritdoc cref="IHandbook.Name"/>
+    /// <inheritdoc cref="INameable.Name"/>
     public string Name { get; set; }
 
     /// <summary>
@@ -53,7 +53,7 @@ public class Company : IHandbook
 
     #endregion
 
-    /// <inheritdoc cref="IHandbook.Create"/>
+    /// <inheritdoc cref="IHandbookBase.Create"/>
     public void Create()
     {
         var context = new DatabaseContext();
@@ -61,7 +61,7 @@ public class Company : IHandbook
         context.SaveChanges();
     }
 
-    /// <inheritdoc cref="IHandbook.Edit"/>
+    /// <inheritdoc cref="IHandbookBase.Edit"/>
     public void Edit()
     {
         var context = new DatabaseContext();
@@ -69,7 +69,7 @@ public class Company : IHandbook
         context.SaveChanges();
     }
 
-    /// <inheritdoc cref="IHandbook.Remove"/>
+    /// <inheritdoc cref="IHandbookBase.Remove"/>
     public void Remove()
     {
         var context = new DatabaseContext();
