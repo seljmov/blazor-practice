@@ -3,15 +3,12 @@
 namespace blazorpractice.Models;
 
 /// <summary>
-/// Связь предприятие/продукт
+/// Связь предприятие/местоположение
 /// </summary>
-public class CompanyProductRelations : IHandbook
+public class CompanyLocationRelation : IHandbookBase
 {
-    /// <inheritdoc cref="IHandbook.Id"/> 
+    /// <inheritdoc cref="IReadOnlyHandbook.Id"/> 
     public int Id { get; set; }
-
-    /// <inheritdoc cref="IHandbook.Name"/> 
-    public string Name { get; set; }
 
     /// <summary>
     /// Идентификатор предприятия
@@ -19,31 +16,31 @@ public class CompanyProductRelations : IHandbook
     public int CompanyId { get; set; }
 
     /// <summary>
-    /// Идентификатор производимого продукта
+    /// Идентификатор местоположения
     /// </summary>
-    public int ProductId { get; set; }
+    public int LocationId { get; set; }
 
-    /// <inheritdoc cref="IHandbook.Create"/> 
+    /// <inheritdoc cref="IHandbookBase.Create"/> 
     public void Create()
     {
         var context = new DatabaseContext();
-        context.CompanyProductRelations.Add(this);
+        context.CompanyLocationRelations.Add(this);
         context.SaveChanges();
     }
 
-    /// <inheritdoc cref="IHandbook.Edit"/> 
+    /// <inheritdoc cref="IHandbookBase.Edit"/> 
     public void Edit()
     {
         var context = new DatabaseContext();
-        context.CompanyProductRelations.Update(this);
+        context.CompanyLocationRelations.Update(this);
         context.SaveChanges();
     }
 
-    /// <inheritdoc cref="IHandbook.Remove"/> 
+    /// <inheritdoc cref="IHandbookBase.Remove"/> 
     public void Remove()
     {
         var context = new DatabaseContext();
-        context.CompanyProductRelations.Remove(this);
+        context.CompanyLocationRelations.Remove(this);
         context.SaveChanges();
     }
 }

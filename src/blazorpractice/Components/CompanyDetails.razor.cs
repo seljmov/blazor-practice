@@ -2,7 +2,6 @@ using blazorpractice.Contexts;
 using blazorpractice.Models;
 using Microsoft.AspNetCore.Components;
 using Microsoft.EntityFrameworkCore;
-using System.Linq;
 
 namespace blazorpractice.Components;
 
@@ -14,11 +13,11 @@ public partial class CompanyDetails
     public int Id { get; set; }
 
     private Company Company { get; set; }
-    private IEnumerable<Product> Products { get; set; }
-    private IEnumerable<Location> Locations { get; set; }
-    private IEnumerable<Owner> Owners { get; set; }
-    private IEnumerable<Company> Partners { get; set; }
-    private IEnumerable<Company> Rivals { get; set; }
+    private IList<Product> Products { get; set; }
+    private IList<Location> Locations { get; set; }
+    private IList<Owner> Owners { get; set; }
+    private IList<Company> Partners { get; set; }
+    private IList<Company> Rivals { get; set; }
 
     protected override void OnParametersSet()
     {
@@ -26,7 +25,8 @@ public partial class CompanyDetails
             .Include(c => c.OwnershipForm)
             .Include(c => c.TargetPurpose)
             .Include(c => c.EconomicSector)
-            .ToList().FirstOrDefault(company => company.Id == Id);
+            .ToList()
+            .FirstOrDefault(company => company.Id == Id);
 
         var companyProducts = _context.CompanyProductRelations
             .Where(relation => relation.CompanyId == Company.Id)

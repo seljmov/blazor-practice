@@ -1,20 +1,10 @@
 ﻿namespace blazorpractice.Models;
 
 /// <summary>
-/// Интерфейс справочников
+/// Базовый интерфейс редактируемых справочников
 /// </summary>
-public interface IHandbook
+public interface IHandbookBase : IReadOnlyHandbook
 {
-    /// <summary>
-    /// Идентификатор
-    /// </summary>
-    public int Id { get; set; }
-
-    /// <summary>
-    /// Наименование
-    /// </summary>
-    public string Name { get; set; }
-
     /// <summary>
     /// Добавить в справочник
     /// </summary>

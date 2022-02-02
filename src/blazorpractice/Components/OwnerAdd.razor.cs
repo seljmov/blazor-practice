@@ -1,6 +1,5 @@
 using blazorpractice.Contexts;
 using blazorpractice.Models;
-using Microsoft.AspNetCore.Components;
 
 namespace blazorpractice.Components;
 
@@ -15,12 +14,12 @@ public partial class OwnerAdd
     public string Education { get; set; }
     public string Comment { get; set; }
     private IList<Company> SelectedCompanies { get; set; }
-    private IEnumerable<Company> Companies { get; set; }
+    private IList<Company> Companies { get; set; }
 
     private bool EndCreated { get; set; } = false;
     private bool SuccessCreated { get; set; } = false;
 
-    protected override void OnInitialized()
+    protected override void OnParametersSet()
     {
         Companies = _context.Companies.ToList();
     }
@@ -43,7 +42,10 @@ public partial class OwnerAdd
             owner.Create();
             var last = _context.Owners.ToList().Last();
             foreach (var company in SelectedCompanies)
-                _context.CompanyOwnerRelations.Add(new CompanyOwnerRelations { OwnerId = last.Id, CompanyId = company.Id });
+            {
+                var relation = new CompanyOwnerRelation { OwnerId = last.Id, CompanyId = company.Id };
+                relation.Create();
+            }
 
             _context.SaveChanges();
             SuccessCreated = true;
@@ -51,7 +53,6 @@ public partial class OwnerAdd
         }
         catch (Exception)
         {
-
         }
 
         SuccessCreated = false;
